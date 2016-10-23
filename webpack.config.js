@@ -27,7 +27,8 @@ module.exports = {
 	},
 	plugins: [
 		new BowerWebpackPlugin({
-			includes: /\.js$/
+			/*在webpack包的帮助下使用bower*/
+			includes: /\.js$/ //只包含这个匹配这个正则的文件
 		})
 	]
 };
