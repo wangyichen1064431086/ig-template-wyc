@@ -35,7 +35,7 @@ const config = require('./config.json');
 		"icons":"http://static.ftchinese.com/ftc-icons/"
   	}
 */
-
+///准备工作：配置nunjucks引擎
 nunjucks.configure('demos',{
 	/** nunjucks.configure([path],[opts]):将给定的字符串编译成可重复使用的nunjucks模板对象
 	  * 参数path:（可选）指定存放模板的目录,默认值为当前的工作目录
@@ -67,20 +67,21 @@ const argv = minimist(process.argv.slice(2),knownOptions);
 */
 const contentDataFile = path.resolve(__dirname,'data',argv.i+'.json');//设置内容数据文件路径：__dirname/data/myanmar.json
 const footerDataFile = path.resolve(__dirname,'data','footer.json');//设置脚部数据文件路径：__dirname/data/footer.json
-const projectName = 
+const projectName = argv.i;
 
-
+///任务prod:设置为生产环境
 gulp.task('prod',function(done){
 	process.env.NODE_ENV = 'prod';
 	done();//疑问：这个done是干嘛用的？？？
 });
 
+///任务dev:设置为开发环境
 gulp.task('dev',function(done){
 	process.env.NODE_ENV = 'dev';
 	done();
 });
 
-
+///任务mustache:采用mustache模板,将data目录下的projectName.json和footer.json作为数据，拼入./views/index.mustache,生成.tmp/projectName.html
 gulp.task('mustache',function(){
 	const DEST = '.tmp';
 
@@ -121,7 +122,7 @@ gulp.task('mustache',function(){
 		.pipe(browserSync.stream({once:true}));//文件改变了得重新启动编译过程，编译完了才能允许浏览器刷新，比如sass和js，就用通知机制stream()
 });
 
-
+///任务style:将client/scss/main.scss解析为css并进行一系列的打包（以兼容浏览器端）等工作，生成.tmp/styles/main.css
 gulp.task('style',function styles(){
 	const DEST =  '.tmp/styles';
 
@@ -164,6 +165,7 @@ gulp.task('eslint',() => {
 		.pipe($.eslint.failAfterError());//如果ESLint为任何一个文件报错了，就等到它们处理完了再终止任务流。
 });
 
+///任务webpack:将./client/js/main.js打包生成.tmp/scripts/main.js
 gulp.task('webpack',function(done){//webpack模块待细学！！！
 	/*以webpack.config.js为参数配置文件,以作为模块导入为webpackConfig对象*/
 	if(process.env.NODE_ENV === 'prod') {
@@ -189,6 +191,7 @@ gulp.task('webpack',function(done){//webpack模块待细学！！！
 	});
 });
 
+///任务serve:并行执行mustache、styles、webpack（三个任务都生成了.tmp目录下的东西），完成后以.tmp,custom,public下的文件为资源使用本地服务器用浏览器打开，并实时监控views和client下文件的变化并刷新浏览器
 gulp.task('serve',gulp.paraller('mustache','styles','webpack',function serve(){
 	browserSync.init({
 		server:{
@@ -204,7 +207,7 @@ gulp.task('serve',gulp.paraller('mustache','styles','webpack',function serve(){
 	gulp.watch('client/scss/**/**/*.scss',gulp.parallel('styles'));
 }));
 
-/***build***/
+
 ///任务rollup:将client/js/main.js编译、压缩，将结果保存到.tmp/script/main.js
 //use rollup and buble to build js
 gulp.task('rollup',() => {
@@ -272,5 +275,116 @@ gulp.task('prefix',() => {
 				}
 			});
 		}))
+		.pipe(gulp.dest('dist'));
+});
+
+///任务:smoosh:将.tmp/index.html中外链css和js改为文本内嵌方式，并对内嵌块进行优化，然后重命名拷贝为dist/projectName.html
+gulp.task('smoosh',gulp.series('custom',function smoosh(){
+	return gulp.src('.tmp/index.html')
+		.pipe($.smoosher({
+			/* 生成一个目的html,将源html中的外部链接的css和js改为文本内嵌方式。
+			*/
+			ignoreFilesNotFound:true//找不到文件时继续执行
+		}))
+		.pipe($.useref())
+			/*解析HTML文件中的构建块，以替换未经优化的scripts和stylesheets
+			*/
+		.pipe($.rename({
+			basename:projectName,//基本名
+			extname:'.html'//扩展名 即projectName.html
+		}))
+		.pipe(gulp.dest('dist'));
+}));
+
+///任务extras：将data/csv/*.csv拷贝到dist下
+gulp.task('extras',function(){
+	return gulp.src('data/csv/*.csv',{
+		dot:true//疑问：这个dot是干嘛意义的？
+	})
+	.pipe(gulp.dest('dist'));
+});
+
+///任务images:将./public/images/projectName/下的图片压缩，并拷贝到ig-template-wyc的同级目录ft-interact/images/projectName下
+gulp.task('images',function(){
+	const SRC = './public/images/'+projectName + '/*.{svg,png,jpg,jpeg,gif}';
+	const DEST = path.resolve(__dirname,config.assets,'images',projectName);//config.assets:"../ft-interact/"
+	console.log('Coping images to: ',DEST);
+
+	return gulp.src(SRC)
+		.pipe($.imagemin({
+			/* 压缩png,gpeg,gif和svg图片
+			*/
+			progressive:true,//progressive:属于imageminJpegtran，type:boolean,default:false，规定是否无损转换图片。
+			interlaced:true,//属于imgageminGifsicle，type:boolean,default:false，规定是否允许gif交错逐步呈现。
+			svgoPlugins:[{cleanupIDs:false}],//作用待查证
+			verbose:true//作用待查证
+		}))
+		.pipe(gulp.dest(DEST));
+});
+
+///任务clean:删除目录.tmp和dist
+gulp.task('clean',function(){
+	return del(['.tmp','dist']).then(()=>{
+		console.log('.tmp and dist deleted');
+	});
+});
+
+///任务build:
+gulp.task('build',gulp.series('prod','clean',gulp.parallel('mustache','styles','rollup','images','extras'),'smoosh'));
+
+///任务"serve:dist"：以dist和public为资源路径，运行本地服务器用浏览器自动打开projectName.html————注意和serve对比
+gulp.task('serve:dist',function(){
+	const indexFile = projectName+'.html';
+	browserSync.init({
+		server:{
+			baseDir:['dist','public'],
+			index:indexFile,//运行服务器后自动打开的文件
+			routes:{
+				'/bower_components':'bower_components'
+			}
+		}	
+	});
+});
+
+///任务'deploy:html':将dist/index.html中的图片url加前缀、压缩html、展示项目大小，最终处理为../special/index.html
+gulp.task('deploy:html',function(){
+	const DEST = path.resolve(__dirname,config.html);//config.html:"../special/"
+	console.log('Deploying built html file to:',DEST);
+	return gulp.src('dist/index.html')
+		.pipe($.prefix(config.imgPrefix))//"http://interactive.ftchinese.com/"
+		// Gulp-prefix cannot prefix <srouce srcset="url, url2">. Do it manually.
+		.pipe($.cheerio(function($,file){//解析详见任务prefix
+			$('picture source').each(function(){
+				var source = $(this);
+		        var srcset = source.attr('srcset')
+		        if (srcset) {
+		          srcset = srcset.split(',').map(function(href) {
+		            return url.resolve(config.imgPrefix, href).replace('%20', ' ');
+		          }).join(', ');
+		          source.attr('srcset', srcset);
+		        }  
+			});
+		}))
+		.pipe($.htmlmin({
+			/*压缩html*/
+			removeComments:true,//去掉注释
+			collapseWhitespace:true,//折叠空格
+			removeAttributeQuotes:true,//在可能的情况下，删除属性周围的引号
+			minifyJS:true,//压缩script元素和事件属性中的javascript
+			minifyCSS:true//使用cleancss工具压缩style元素中的CSS和style属性中的CSS
+		}))
+		.pipe($.size({
+			gzip:true,
+			showFiles:true
+		}))
+		.pipe(gulp.dest(DEST));
+});
+
+
+///任务demos:将.tmp下的文件全部复制到dist下，而其中的index.html将重命名为projectName.html
+gulp.task('html:demo',()=>{
+	console.log('Rename html to:',projectName,'Copy all to:dist');
+	return gulp.src('.tmp/**/*.{html,css,js,map}')
+		.pipe($.if('index.html',$.rename({basename:projectName})))
 		.pipe(gulp.dest('dist'));
 });
