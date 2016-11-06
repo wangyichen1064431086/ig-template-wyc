@@ -123,7 +123,7 @@ gulp.task('mustache',function(){
 });
 
 ///任务style:将client/scss/main.scss解析为css并进行一系列的打包（以兼容浏览器端）等工作，生成.tmp/styles/main.css
-gulp.task('style',function styles(){
+gulp.task('styles',function(){
 	const DEST =  '.tmp/styles';
 
 	return gulp.src('client/scss/main.scss')
@@ -192,7 +192,7 @@ gulp.task('webpack',function(done){//webpack模块待细学！！！
 });
 
 ///任务serve:并行执行mustache、styles、webpack（三个任务都生成了.tmp目录下的东西），完成后以.tmp,custom,public下的文件为资源使用本地服务器用浏览器打开，并实时监控views和client下文件的变化并刷新浏览器
-gulp.task('serve',gulp.paraller('mustache','styles','webpack',function serve(){
+gulp.task('serve',gulp.parallel('mustache','styles','webpack',function serve(){
 	browserSync.init({
 		server:{
 			baseDir:['.tmp','custom','public'],

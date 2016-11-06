@@ -1,0 +1,81 @@
+body {
+	font-family: "Helvetica Neue", "Lucida Grande", Verdana, "PingFang SC", "PingFang TC", "Hiragino Sans GB", "Heiti SC", "Heiti TC", "WenQuanYi Micro Hei", "Microsoft YaHei", "Microsoft JhengHei", STHeiti, sans-serif;
+	margin:0;
+	padding:0;
+	@include oColorsFor(page);//@mixin oColorFor输出指定case的所有css样式语句
+}
+
+///关于o-grid的代码还要再看一遍！！！
+
+[data-o-grid-container] {//属性选择器：[attr]Represents an element with an attribute name of attr.
+	position:relative;
+	box-sizing:border-box;
+	margin-left:auto;
+	margin-right:auto;
+	min-width:$o-grid-min-width;//最小宽度，240px !default
+	max-width:$_o-grid-max-width;//1220px
+	padding-left:oGridGutter();//获取某种页面类型的间隔，参数默认为default，间隔为10px
+	padding-right:oGridGutter();
+
+	@include oGridRespondTo(M) { //将样式运用到给定的页面类型尺寸上
+		padding-left:oGridGutter(M);
+		padding-right:oGridGutter(M);//20px
+	}
+
+	@include oGridTargetIE8 {//针对IE8的样式混合器
+		padding-left:oGridGutter($o-grid-fixed-layout);//当栅格有固定宽度时，默认的layout—— $o-grid-fixed-layout: 'L' !default
+		padding-right:oGridGutter($o-grid-fixed-layout);
+		width:oGridGetMaxWidthForLayout($o-grid-fixed-layout,$grid-mode:'fixed');//获取某一页面类型在某一栅格模式(fixed,snappy or fluid)下中可取到的最大宽度
+	}
+}
+
+[data-o-grid-row] {
+	display:flex;
+	flex-wrap:wrap;
+	margin-left:-1 * oGridGutter();
+
+	@include oGridRespondTo(M) {
+		margin-left: -1 * oGridGutter(M);
+	}
+
+	@include oGridTargetIE8 {
+		margin-left: -1 * oGridGutter($o-grid-fixed-layout);
+	}
+
+}
+
+[data-o-grid-col] {
+	position:relative;
+	box-sizing:border-box;
+	flex:1 1 0%;
+	padding-left:oGridGutter();
+
+	@include oGridRespondTo(M) {
+		padding-left:oGridGutter(M);
+	}
+
+	@include oGridTargetIE8 {
+		padding-left:oGridGutter($o-grid-fixed-layout);
+	}
+}
+
+figure {
+	margin:0;
+	padding:0;
+}
+
+ul,ol {
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+
+a {
+	@include oColorsFor(ig-link,text);
+	text-decoration:none;
+}
+
+p {
+	font-size:18px;
+	line-height:1.7;
+}

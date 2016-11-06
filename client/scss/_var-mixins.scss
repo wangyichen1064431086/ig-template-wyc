@@ -1,0 +1,71 @@
+$ig-primary-col-width:6;
+
+/* $ratio: percentage(height / width) */
+@mixin igSetMediaRatio($ratio) {
+	@if unit($ratio) != "%" {//unit():返回变量的单位
+		$ratio: percentage($ratio);//Converts a unitless number to a percentage.
+	}
+	padding-top:$ratio;
+}
+
+
+@mixin lazyloadMedia($classname:'lazyload',$ratio:71.42%) {//'lazyload'和71.42%是参数默认值
+	@if unit($ratio) != "%" {
+		$ratio:percentage($ratio);
+	}
+	.#{$classname}__outer{//#{}:use SassScript variables in selectors and property names using #{} interpolation syntax
+		position:relative;
+		display:block;
+		height:0;
+		padding-top:$ratio;
+	}
+	.#{$classname}__inner {
+		position:absolute;
+		top:0;
+		left:0;
+		width:100%;
+		height:100%;
+	}
+} 
+
+@mixin igGridColWidth($span) {
+	@if type-of($span) == number {//type-of():Returns the type of a value.
+		display:block;
+
+		///Fix Safari bug
+		flex-basis:oGridColspan($span);//@function oGridColspan:把一个元素在栅格系统中所占的宽度描述('one-half'、'two-thirds')转换为百分比
+
+		/// Define width in %
+		min-width:oGridColspan($span);
+		max-width:oGridColspan($span);//疑问：不懂这min-width和max-width设置成一样的意义在何
+
+		/// For IE8
+		width:oGridColspan($span);
+
+	}
+}
+
+@mixin igBackgroundOverlay {
+	&:after {
+		content:'';
+		position:absolute;
+		left:0;
+		right:0;
+		top:0;
+		bottom:0;
+		background-color:rgba(0,0,0,0.2);
+	}
+}
+
+@mixin igBackgroundMask {
+	background-color:rgba(0,0,0,0.2);
+}
+
+@mixin igQuoteDivider {
+	content:'';
+	display:block;
+	width:50%;
+	height:1px;
+	background-color:#000;
+	margin:0 auto;
+}

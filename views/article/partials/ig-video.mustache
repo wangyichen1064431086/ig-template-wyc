@@ -1,0 +1,30 @@
+<figure class="ig-figure ig-figure--video" data-media-ratio="9/16"><!-- 疑问：data-media-ratio属性？？-->
+	{{# title}}
+	<h4 class="ig-figure__title">
+		{{title}}
+	</h4>
+	{{/ title}}
+
+	<div class="ig-figure__video lazyload__outer">
+		{{# cc}}
+		<div class="lazyload__inner">
+			<script src="{{{src}}}" type="text/javascript">
+			</script>
+		</div>
+		{{/ cc}}
+		
+		{{# ft}}
+		<video class="lazyload__inner" preload="metadata" controls poster="{{{poster}}}">
+			{{# source}}
+			<source src="{{{src}}}" type="{{{type}}}">
+			{{/ source}}
+		</video>
+		{{/ ft}}
+	</div>
+
+	{{# caption}}
+	<figcaption class="ig-figure__caption">
+		{{caption}}
+	</figcaption>
+	{{/ caption}}
+</figure>

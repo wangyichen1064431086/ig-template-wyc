@@ -1,0 +1,29 @@
+.ig-blockquote {
+  padding: 1px 0px;
+  margin: 30px auto;
+  text-align: center;
+  width: 80%;
+  
+  &__text {
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1.6em;
+    line-height: 1.5;
+    margin: 35px 0;
+    padding: 0;
+  }
+
+  &__caption {
+    @include oColorsFor(ig-caption, text);
+    line-height: 1.7;
+    margin: 35px 0;
+    font-size: 90%;
+  }
+  
+  &:before {
+    @include igQuoteDivider;
+  }
+  &:after {
+    @include igQuoteDivider;
+  }
+}

@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="zh-Hans" class="{{#enableScroll}}enable-scrollmation{{/enableScroll}}
+<html lang="zh-Hans" class="{{#enableScroll}}enable-scrollmation{{/enableScroll}} 
 {{#autoNav}}enable-autonav{{/autoNav}}
 {{#demo}}demo{{/demo}}">
-<head>
+<head><!-- enableScroll为true,autoNav为null,来自data/myanmar.json -->
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<!-- 
+		http-equiv:这个枚举属性定义了能改变服务器和用户引擎行为的编译,编译值使用content 来定义
+		X-UA-Compatible是IE8新增的设置，可指定网页的兼容性模式。
+		告诉IE浏览器，IE8/9及以后的版本都会以最高版本IE来渲染页面。
+		疑问：这里在什么手册可以查？？？  
+	 -->
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<meta name="copyright" content="FT中文网">
 	<meta name="robots" content="index,follow">
@@ -18,12 +24,16 @@
 	<link rel="stylesheet" type="text/css" href="styles/main.css">
 	{{# customCss}}
 	<link rel="stylesheet" type="text/css" href="styles/{{projectName}}.css">
-	{{/ customCss}}
+	{{/ customCss}}<!-- 当前说明：customCss为false/projectName无定义 -->
 	<!-- endsmoosh -->
+	<!-- 知识性说明：
+		用于使用gulp-smoosher插件，以生成一个目的html,将源html中的外部链接的css和js改为文本内嵌方式。参见gulpfile.js的任务smoosh
+		这里的href是从.tmp中开始查找资源的
+	-->
 
 	{{# analytics}}
 		{{> partials/analytics}} <!-- 这是有关ga分析的 -->
-	{{/ analytics}}
+	{{/ analytics}}<!-- 当前说明：analytics未定义，故该子板块不显示 -->
 </head>
 
 <body>

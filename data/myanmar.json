@@ -1,0 +1,42 @@
+{
+	"enableScroll":true,
+	"autoNav":null,
+	"ogTitle":"缅甸失地农民",
+	"ogType":"article",
+	"ogImage":"",
+	"ogUrl":"",
+	"description":"在缅甸，独裁统治的结束引发了围绕土地的争斗。",
+	"iconsPath": "/bower_components/ftc-icons/",
+	"pageTitle":"缅甸实地农民",
+	"customCss":false,
+	"wechatImage":"/images/myanmar/sapienza_new-lr_cycwhld.jpg",
+	"lightTheme":false,
+	"darkTheme":true,
+	"seriesTitle":"调查报道",
+	"autoNav":null,
+	"englishEdition":{
+		"text":"English",
+		"href":"https://ig.ft.com/sites/land-rush-investment/myanmar/"
+	},
+	"sections":[
+		{
+			"navText":"1.失去的土地"
+		},
+		{
+			"navText":"2.抱负"
+		},
+		{
+			"navText":"3.村庄"
+		},
+		{
+			"navText":"4.导火索"
+		},
+		{
+			"navText":"5.赢家和输家"
+		}
+	],
+	
+
+
+
+}

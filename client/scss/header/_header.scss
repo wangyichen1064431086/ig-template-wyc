@@ -1,0 +1,161 @@
+.o-header {
+	box-sizing: border-box;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 100;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	width: 100%;
+	height: $o-header-height;
+	@include oColorsFor(o-header, text background);
+
+	a {
+		text-decoration: none;
+	}
+	&--light {
+		@include oColorsFor(o-header--light, text background);
+		border-bottom: 1px solid oColorsGetColorFor(o-header-divider--light, border);
+	}
+}
+
+.o-header__container {
+	box-sizing: border-box;
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+
+.o-header__left {
+	box-sizing: border-box;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	z-index: 1;
+}
+
+.o-header__logo,
+.o-header__series {
+	box-sizing: border-box;
+	height: $o-header-height;
+	line-height: $o-header-height;
+	display: inline-block;
+	vertical-align: middle;
+
+	margin: 0;
+	padding: 0;
+	font-size: 20px;
+	
+	@include oGridRespondTo(M) {
+		font-size: 24px;
+	}
+}
+
+.o-header__logo-link {
+	box-sizing: border-box;
+	padding: 5px;
+	margin-left: 5px;
+	display: inline-block;
+	height: $o-header-height;
+	width: $o-header-height;
+	span {
+		display: none;
+	}
+	img {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.o-header__series {
+	@include oGridRespondTo($until:M) {
+		display: none;
+	}
+}
+
+.o-header__center {
+	box-sizing: border-box;
+	text-align: center;
+	width: 100%;
+	height: 100%;
+	line-height: $o-header-height;
+
+	.o-header__edition {
+		display: none;
+		&:hover {
+			border-bottom: 1px solid;
+		}
+		@include oGridRespondTo(M) {
+			display: inline;
+		}		
+	}
+}
+
+.o-header__auto-nav,
+.o-header__title {
+	box-sizing: border-box;
+	text-align: left;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	text-align: center;
+}
+
+.o-header__auto-nav {
+	display: none;
+	@include oGridRespondTo(M) {
+		display: block;
+	}
+	.o-header__nav-link {
+		display: inline-block;
+		line-height: $o-header-height;
+		color: rgba(255,255,255,0.6);
+
+		&:hover,
+		&.active {
+			color: white;
+		}
+	}
+}
+
+.o-header__headline,
+.o-header__edition {
+	box-sizing: border-box;
+	white-space: nowrap;
+	font-size: 20px;
+	font-weight: 600;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.o-header__edition {
+	font-weight: normal;
+	font-size: 14px;
+	margin-left: 10px;
+	vertical-align: middle;
+	display: none;
+	@include oGridRespondTo(M) {
+		& {
+			display: inline;
+		}
+	}
+}
+
+.o-header__right {
+	box-sizing: border-box;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+}
+

@@ -1,0 +1,145 @@
+.o-share {
+	display: none;	
+	@include oGridRespondTo(M) {
+		display: inline-block;
+		vertical-align: middle;
+	}
+}
+
+.o-share--dark {
+	@include oShareCustomBase {
+		background-color: transparent;
+		border: 1px solid #ffffff;
+	}
+}
+
+.o-header__nav-toggle {
+	box-sizing: border-box;
+	position: relative;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	outline: none;
+	cursor: pointer;
+	background: none;
+
+	height: $o-header-height;
+	width: $o-header-height;
+	line-height: $o-header-height;
+	display: inline-block;
+
+	text-align: center;	
+	vertical-align: middle;
+
+	span {
+		display: none;
+	}
+	svg {
+		width: 20px;
+		height: 20px;
+		fill: oColorsGetColorFor(o-header, text);
+		display: inline-block;
+		vertical-align: middle;
+	}
+	.o-header--light & {
+		svg {
+			fill: oColorsGetColorFor(o-header--light, text);
+		}
+	}
+	.o-icons__hamburger {
+		display: inline-block;
+	}
+	.o-icons__cross {
+		display: none;
+	}
+	
+	&[aria-expanded="true"] {
+		.o-icons__hamburger {
+			display: none;
+		}
+		.o-icons__cross {
+			display: inline-block;
+		}
+	}
+
+	.enable-autonav & {
+		@include oGridRespondTo(M) {
+			width: 0px;
+		}
+	}
+}
+
+.o-header__nav {
+	box-sizing: border-box;
+	display: none;
+	padding: 0 6px;
+	margin: 0;
+	list-style-type: none;
+
+	@include oColorsFor(o-header-nav, background);
+	
+	.o-header--light & {
+		@include oColorsFor(o-header-nav--light, background);
+	}
+
+	width: 50%;
+	@include oGridRespondTo(M) {
+		max-width: 50%;
+		width: 210px;
+	}
+	
+	&[aria-hidden="false"] {
+		display: block;
+		position: fixed;
+		top: $o-header-height;
+		right: 0;
+		bottom: 0;
+	}
+}
+
+.o-header__nav-item {
+	line-height: 34px;
+	border-bottom: 1px dotted oColorsGetColorFor(o-header-divider, border);
+	&:last-child {
+		border-bottom: 0;
+	}
+
+	.o-header__edition {
+		display: block;
+	}
+
+	@include oGridRespondTo(M) {
+		margin-left: 0;
+		&.mobile {
+			display: none;
+		}
+	}
+
+	.o-header--light & {
+		margin-bottom: 4px;
+		border-bottom: 1px dotted oColorsGetColorFor(o-header-divider--light, border);
+	}
+}
+.o-header__nav-link {
+	text-decoration: none;
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+	font-size: 16px;
+	display: block;
+	padding: 0 15px;
+	line-height: 38px;
+
+	@include oColorsFor(o-header-item, text);
+
+	.o-header--light &{
+		@include oColorsFor(o-header-item--light, text);
+		border-left: 5px solid orange;
+	}
+
+	&:hover,
+	&:focus {
+		color: oColorsGetColorFor(link-title-hover, text);
+	}
+}
+

@@ -1,0 +1,73 @@
+.ig-figure {
+  margin: 0 auto;
+  padding: 15px 0;
+
+  .section-col__secondary & {
+  	padding: $o-header-height + 15px 0;
+  }
+
+	&--mobile {
+		display: block;
+	}
+
+	@include oGridRespondTo(M) {
+		&--mobile {
+			display: none;
+		}
+	}
+
+	&__image-text {
+		box-sizing: border-box;
+
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		color: #fff;
+		margin: 0;
+		padding: 15px;
+		background-color: rgba(0, 96, 156, .85);
+	}
+
+	&__title {
+		margin: 1em 0 0.5em 0;
+	}
+
+	&__video {
+		@include oColorsFor(ig-video, background);
+	}
+
+	&__image {
+		@include oColorsFor(ig-image, background);
+	}
+	.section-col__secondary &__image {
+		background-color: transparent;
+	}
+
+	&__caption {
+	   @include oColorsFor(ig-caption, text);
+	   margin-top: 10px;
+	   font-size: 16px;
+	   line-height: 1.3;
+	   text-align: center;
+	}
+
+	.section-col__secondary &__caption {
+		text-align: left;
+	}
+
+	[data-ig-component="ig-sticky"] .section-col__primary &__caption {
+		color: #ccc;
+	}
+
+	img {
+		object-fit: cover;
+	}
+
+	video {
+		box-sizing: border-box;
+		object-fit: contain; 
+	}
+}
+
+

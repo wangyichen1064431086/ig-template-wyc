@@ -1,0 +1,37 @@
+{{# picture}} 
+<picture class="ig-background ig-background--picture" 
+	{{# ft}}
+	data-video-fallback 
+	{{/ ft}}>
+	<!-- 疑问：怎么还能这么用。。picture里面套ft-->
+	<!--! 知识性说明：
+    	picture元素是一个容器，用来为其内部特定的img元素提供多样的source元素。浏览器会根据当前页面的布局以及当前设备去从中选择最适合的资源。
+    -->
+	{{# source}}
+	<source 
+		{{# landscape}} 
+		media="(min-aspect-radio:1/1)" 
+		{{/ landscape}}
+		{{# portrait}}
+		media="(max-aspect-radio:1/1)"
+		{{/ portrait}}
+		srcset="{{# srcset}}{{{.}}}{{/ srcset}}">
+		<!--知识说明：
+			source元素的media属性允许你提供一个用于给用户作为选择source元素的依据的媒体查询，如果这个媒体查询的匹配结果为false，那么这个source元素会被跳过；
+			source元素的srcset属性：A list of one or more strings separated by commas indicating a set of possible images represented by the source for the browser to use. 
+		-->
+	{{/ source}}
+
+	<img class="ig-background__media" src="{{{src}}}">
+</picture>
+{{/ picture}}
+
+{{# ft}}
+<div class="ig-background ig-background--video">
+	<video class="ig-background__media" preload="metadata" poster="{{{poster}}} muted autoplay loop">
+		{{# source}}
+		<source src="{{{src}}}" type="video/{{{type}}}">
+		{{/ source}}
+	</video>
+</div>
+{{/ ft}}
